@@ -13,6 +13,7 @@ import re
 import assemblyai as aai
 from .models import BlogPost
 import google.generativeai as genai
+from django.http import HttpResponseBadRequest
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 ASSEMBLYAI_API_KEY = os.getenv("ASSEMBLYAI_API_KEY")
@@ -26,6 +27,8 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 @login_required
 def index(request):
+    if request.method != 'GET':
+        return HttpResponseBadRequest("Only GET requests are allowed.")
     return render(request, 'index.html')
 
 @csrf_exempt
